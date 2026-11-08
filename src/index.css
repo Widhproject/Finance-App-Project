@@ -1,0 +1,88 @@
+@import '@fontsource-variable/inter';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Design tokens: DESIGN.md (Linear). Dark = canvas/surface ladder, light = inverse set. ── */
+:root, :root[data-theme='dark'] {
+  color-scheme: dark;
+  --canvas: 1 1 2;            /* #010102 */
+  --surface-1: 15 16 17;      /* #0f1011 */
+  --surface-2: 20 21 22;      /* #141516 */
+  --surface-3: 24 25 26;      /* #18191a */
+  --surface-4: 25 26 27;      /* #191a1b */
+  --hairline: 35 37 42;       /* #23252a */
+  --hairline-strong: 52 52 58;/* #34343a */
+  --ink: 247 248 248;         /* #f7f8f8 */
+  --ink-muted: 208 214 224;   /* #d0d6e0 */
+  --ink-subtle: 138 143 152;  /* #8a8f98 */
+  --ink-faint: 98 102 109;    /* #62666d */
+  --primary: 94 106 210;      /* #5e6ad2 */
+  --primary-hover: 130 143 255;
+  --income: 34 197 94;
+  --expense: 239 68 68;
+  --warn: 229 166 63;
+  --edge: rgb(255 255 255 / 0.05);
+}
+:root[data-theme='light'] {
+  color-scheme: light;
+  --canvas: 255 255 255;
+  --surface-1: 246 247 247;
+  --surface-2: 238 240 241;
+  --surface-3: 232 234 236;
+  --surface-4: 226 228 231;
+  --hairline: 226 228 232;
+  --hairline-strong: 205 209 215;
+  --ink: 8 9 10;
+  --ink-muted: 60 65 73;
+  --ink-subtle: 104 110 119;
+  --ink-faint: 150 155 163;
+  --primary: 94 106 210;
+  --primary-hover: 74 86 190;
+  --income: 22 128 61;
+  --expense: 205 35 35;
+  --warn: 160 105 10;
+  --edge: rgb(255 255 255 / 0.9);
+}
+
+html, body, #root { height: 100%; }
+body {
+  @apply bg-canvas text-ink font-sans antialiased;
+  font-size: 14px; line-height: 1.5; letter-spacing: 0;
+  font-feature-settings: 'cv11', 'ss03';
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior-y: none;
+}
+.num { font-variant-numeric: tabular-nums; }
+:focus-visible { outline: 2px solid rgb(var(--primary) / 0.5); outline-offset: 2px; }
+::selection { background: rgb(var(--primary) / 0.35); }
+* { scrollbar-width: thin; scrollbar-color: rgb(var(--hairline-strong)) transparent; }
+
+@layer components {
+  .card { @apply bg-s1 border border-hair rounded-lg; box-shadow: inset 0 1px 0 var(--edge); }
+  .panel { @apply bg-s1 border border-hair rounded-xl; box-shadow: inset 0 1px 0 var(--edge); }
+  .btn { @apply inline-flex items-center justify-center gap-2 h-11 md:h-10 px-3.5 rounded-md text-[14px] font-medium leading-none whitespace-nowrap select-none transition-colors disabled:opacity-40 disabled:pointer-events-none; }
+  .btn-primary { @apply btn bg-primary text-white hover:bg-primary-hover active:brightness-90; }
+  .btn-secondary { @apply btn bg-s1 text-ink border border-hair hover:bg-s2 hover:border-hair-strong; }
+  .btn-ghost { @apply btn text-ink-muted hover:bg-s2 hover:text-ink; }
+  .btn-danger { @apply btn bg-expense text-white hover:brightness-110; }
+  .btn-icon { @apply inline-flex items-center justify-center w-10 h-10 md:w-9 md:h-9 rounded-md text-ink-subtle hover:bg-s2 hover:text-ink transition-colors; }
+  .input { @apply w-full h-11 md:h-10 px-3 rounded-md bg-s1 border border-hair text-ink placeholder:text-ink-faint text-base md:text-[14px] transition-colors hover:border-hair-strong focus:border-hair-strong; }
+  textarea.input { @apply h-auto py-2.5 leading-normal; }
+  .label { @apply block text-caption text-ink-subtle mb-1.5; }
+  .badge { @apply inline-flex items-center gap-1 rounded-full bg-s2 text-ink-muted text-caption px-2 py-0.5; }
+  .tab { @apply h-9 px-3.5 rounded-full text-[14px] font-medium text-ink-subtle hover:text-ink transition-colors; }
+  .tab[aria-selected='true'] { @apply bg-s2 text-ink; }
+  .h1 { @apply text-[22px] md:text-[28px] font-semibold; letter-spacing: -0.6px; line-height: 1.2; }
+  .h2 { @apply text-[15px] font-medium text-ink; letter-spacing: -0.1px; }
+  .rowhover { @apply hover:bg-s2 transition-colors; }
+}
+
+.pb-safe { padding-bottom: env(safe-area-inset-bottom); }
+.pt-safe { padding-top: env(safe-area-inset-top); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+.recharts-text { fill: rgb(var(--ink-subtle)); font-size: 12px; }
+.recharts-cartesian-grid line { stroke: rgb(var(--hairline)); }
