@@ -12,7 +12,7 @@ export default {
         primary: v('primary'), 'primary-hover': v('primary-hover'),
         income: v('income'), expense: v('expense'), warn: v('warn'),
       },
-      borderRadius: { xs: '4px', sm: '6px', md: '8px', lg: '12px', xl: '16px', xxl: '24px' },
+      borderRadius: { xs: '4px', sm: '6px', md: '8px', lg: '12px', xl: '18px', xxl: '24px' },
       fontFamily: { sans: ['"Inter Variable"', 'SF Pro Display', '-apple-system', 'system-ui', 'Segoe UI', 'Roboto', 'sans-serif'] },
       fontSize: {
         caption: ['12px', { lineHeight: '1.4' }],

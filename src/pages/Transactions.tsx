@@ -1,4 +1,5 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { Plus, Search, SlidersHorizontal, ArrowLeftRight, X } from 'lucide-react'
 import { useApp } from '../store/AppStore'
 import { useUI } from '../components/layout/Shell'
@@ -13,7 +14,9 @@ type TypeFilter = 'all' | 'income' | 'expense' | 'transfer'
 export default function Transactions() {
   const { transactions, accounts, categories, period, periodOf, settings } = useApp()
   const { openTx } = useUI()
-  const [q, setQ] = useState('')
+  const [params] = useSearchParams()
+  const [q, setQ] = useState(params.get('q') ?? '')
+  useEffect(() => { const v = params.get('q'); if (v !== null) { setQ(v); setScope('all') } }, [params])
   const [type, setType] = useState<TypeFilter>('all')
   const [catId, setCatId] = useState('')
   const [accId, setAccId] = useState('')

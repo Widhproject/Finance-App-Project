@@ -81,4 +81,12 @@ describe('parseReceipt', () => {
     expect(a).not.toBe(receiptKey({ merchant: 'Indomaret', date: '2025-03-12', time: '18:43', total: 27700, itemCount: 3 }))
   })
   it('rejects impossible dates', () => { expect(findDate('99/99/2025')).toBeUndefined() })
+  it('reads two-line items even when OCR adds a colon after x', () => {
+    const r = parseReceipt('INDOMARET\nINDOMIE GORENG SPESIAL\n5 x: 3.500   17.500\nTotal Belanja 17.500\n07-11-2026 18:42')
+    expect(r.items).toHaveLength(1); expect(r.items[0]).toMatchObject({ qty: 5, unitPrice: 3500, total: 17500 })
+  })
+  it('does not treat fuel-pump lines as items', () => {
+    const r = parseReceipt('PERTAMINA\nProduk PERTALITE\nHarga/Liter 10.000\nVolume (L) 4,50\nTOTAL 45,000\nCash 50.000\nKembali 5.000\n09-11-2026 07:31')
+    expect(r.items).toHaveLength(0); expect(r.total).toBe(45000)
+  })
 })

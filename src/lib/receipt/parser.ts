@@ -121,6 +121,7 @@ export function findMerchant(lines: string[]): string {
 /* ---------- items ---------- */
 const cleanName = (s: string) => s.replace(/^[\d\s.\-*#]{5,}\s+/, '').replace(/[^\p{L}\p{N}&'./%\- ]/gu, ' ').replace(/\s+/g, ' ').trim()
 const isKeywordLine = (l: string) => RX.grand.test(l) || RX.total.test(l) || RX.subtotal.test(l) || RX.tax.test(l) || RX.discount.test(l) || RX.cash.test(l) || RX.change.test(l) || RX.extra.test(l) || RX.header.test(l)
+const NOT_ITEM = /\b(harga\s*\/?\s*liter|volume|produk|liter|operator|nozzle|pompa|meja|tgl|tanggal|jam)\b/i
 const okAmt = (v: number) => v >= 100 && v < 1e9
 
 export function parseItems(lines: string[]): ReceiptItem[] {
@@ -128,7 +129,7 @@ export function parseItems(lines: string[]): ReceiptItem[] {
   const merged: string[] = []
   for (const raw of lines) {
     const l = raw.trim()
-    if (/^\d+(?:[.,]\d+)?\s*[xX@*]\s*[\d.,]+\s+[\d.,]+$/.test(l) && merged.length) {
+    if (/^\d+(?:[.,]\d+)?\s*[xX@*]:?\s*[\d.,]+\s+[\d.,]+$/.test(l) && merged.length) {
       const prev = merged[merged.length - 1]
       if (/[A-Za-z]{2}/.test(prev) && !/[\d.,]{4,}\s*$/.test(prev)) { merged[merged.length - 1] = `${prev} ${l}`; continue }
     }
@@ -137,10 +138,10 @@ export function parseItems(lines: string[]): ReceiptItem[] {
   const items: ReceiptItem[] = []
   for (const raw of merged) {
     const l = raw.split(/(\s+)/).map(fixDigits).join('')
-    if (!l || isKeywordLine(l) || findDate(l) || /\d{9,}/.test(l.replace(/[.,\s]/g, '')) && !/[A-Za-z]{3}/.test(l)) continue
+    if (!l || isKeywordLine(l) || NOT_ITEM.test(l) || findDate(l) || /\d{9,}/.test(l.replace(/[.,\s]/g, '')) && !/[A-Za-z]{3}/.test(l)) continue
     let m: RegExpMatchArray | null
     let name = '', qty = 1, unit = 0, total = 0
-    if ((m = l.match(/^(.*?[A-Za-z].*?)\s+(\d+(?:[.,]\d+)?)\s*[xX*@]\s*([\d.,]+)(?:\s+(-?[\d.,]+))?\s*$/))) {
+    if ((m = l.match(/^(.*?[A-Za-z].*?)\s+(\d+(?:[.,]\d+)?)\s*[xX*@]:?\s*([\d.,]+)(?:\s+(-?[\d.,]+))?\s*$/))) {
       name = m[1]; qty = Number(m[2].replace(',', '.')); unit = parseAmount(m[3]) ?? 0; total = m[4] ? parseAmount(m[4]) ?? 0 : Math.round(qty * unit)
     } else if ((m = l.match(/^(.*[A-Za-z].*?)\s+(\d{1,3})\s+([\d.,]{3,})\s+([\d.,]{3,})\s*$/))) {
       name = m[1]; qty = Number(m[2]); unit = parseAmount(m[3]) ?? 0; total = parseAmount(m[4]) ?? 0

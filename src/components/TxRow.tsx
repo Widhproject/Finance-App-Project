@@ -6,6 +6,7 @@ import { useUI } from './layout/Shell'
 import { ConfirmDialog, Money, cx } from './ui'
 import { formatDate, formatTime } from '../lib/dates'
 import { formatMoney } from '../lib/money'
+import { iconFor } from '../lib/categoryIcon'
 
 /** One transaction. `expandable` rows reveal note, receipt items, photo and edit/delete actions. */
 export default function TxRow({ t, expandable = true, showDate = false }: { t: Transaction; expandable?: boolean; showDate?: boolean }) {
@@ -25,19 +26,19 @@ export default function TxRow({ t, expandable = true, showDate = false }: { t: T
     return () => { dead = true; if (url) URL.revokeObjectURL(url); setImg(null) }
   }, [open, t.id, t.hasAttachment, getAttachment])
 
-  const Icon = t.type === 'income' ? ArrowDownLeft : t.type === 'expense' ? ArrowUpRight : ArrowLeftRight
-  const tint = t.type === 'income' ? 'text-income' : t.type === 'expense' ? 'text-expense' : 'text-primary'
+  const Icon = t.type === 'transfer' ? ArrowLeftRight : iconFor(cat?.name ?? t.name)
+  const color = t.type === 'transfer' ? '#7c5cff' : cat?.color ?? '#8a8f98'
   const sub = t.type === 'transfer' ? `${acc?.name ?? '?'} → ${to?.name ?? '?'}` : `${cat?.name ?? 'Tanpa kategori'} · ${acc?.name ?? 'Akun dihapus'}`
 
   return (
     <div className="border-b border-hair last:border-0">
       <button type="button" className={cx('w-full flex items-center gap-3 px-3 sm:px-4 py-3 text-left rowhover', !expandable && 'cursor-default')} onClick={() => expandable && setOpen(!open)} aria-expanded={expandable ? open : undefined}>
-        <span className={cx('w-9 h-9 rounded-md bg-s2 border border-hair flex items-center justify-center shrink-0', tint)}><Icon size={16} /></span>
+        <span className="w-10 h-10 rounded-full flex items-center justify-center shrink-0 relative" style={{ background: `linear-gradient(145deg, ${color}, ${color}99)`, color: '#fff', boxShadow: 'inset 0 1.5px 0 rgb(255 255 255 / .45), 0 6px 12px -6px ' + color }}><Icon size={17} />{t.type !== 'transfer' && <span className="absolute -right-0.5 -bottom-0.5 w-3.5 h-3.5 rounded-full bg-s2 flex items-center justify-center">{t.type === 'income' ? <ArrowDownLeft size={9} className="text-income" /> : <ArrowUpRight size={9} className="text-expense" />}</span>}</span>
         <span className="flex-1 min-w-0">
           <span className="block font-medium truncate">{t.name}</span>
           <span className="block text-caption text-ink-subtle truncate">{sub} · {showDate ? formatDate(t.date, false) + ', ' : ''}{formatTime(t.date)}</span>
         </span>
-        <span className={cx('text-right font-medium', t.type === 'income' && 'text-income', t.type === 'transfer' && 'text-ink-muted')}>
+        <span className={cx('text-right font-medium', t.type === 'income' && 'text-income', t.type === 'expense' && 'text-expense', t.type === 'transfer' && 'text-ink-muted')}>
           <Money minor={t.type === 'expense' ? -t.amount : t.amount} currency={cur} sign={t.type === 'income'} />
         </span>
         {expandable && <ChevronDown size={14} className={cx('text-ink-faint transition-transform shrink-0', open && 'rotate-180')} />}
@@ -52,7 +53,7 @@ export default function TxRow({ t, expandable = true, showDate = false }: { t: T
             {t.recurringId && <><dt className="text-ink-subtle">Sumber</dt><dd>Transaksi berulang</dd></>}
           </dl>
           {t.items && t.items.length > 0 && (
-            <div className="card bg-canvas overflow-x-auto">
+            <div className="card overflow-x-auto">
               <table className="w-full text-[13px]"><thead><tr className="text-ink-subtle text-left"><th className="px-3 py-2 font-normal">Barang</th><th className="px-2 py-2 font-normal text-right">Qty</th><th className="px-3 py-2 font-normal text-right">Total</th></tr></thead>
                 <tbody>{t.items.map((i, k) => <tr key={k} className="border-t border-hair"><td className="px-3 py-1.5">{i.name}</td><td className="px-2 text-right num">{i.qty}</td><td className="px-3 text-right num">{formatMoney(i.total)}</td></tr>)}</tbody></table>
             </div>

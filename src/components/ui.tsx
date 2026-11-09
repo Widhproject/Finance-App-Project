@@ -33,10 +33,9 @@ export function Modal({ open, onClose, title, children, footer, wide }: { open: 
   if (!open) return null
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center animate-fade" onMouseDown={(e) => e.target === e.currentTarget && onClose()}>
-      <div className="absolute inset-0 bg-black/70" aria-hidden />
+      <div className="absolute inset-0 bg-[#07041a]/75 backdrop-blur-sm" aria-hidden />
       <div ref={ref} role="dialog" aria-modal="true" aria-labelledby={titleId}
-        className={cx('relative w-full bg-s1 border border-hair-strong sm:rounded-xl rounded-t-xl max-h-[92dvh] flex flex-col animate-sheet', wide ? 'sm:max-w-2xl' : 'sm:max-w-md')}
-        style={{ boxShadow: 'inset 0 1px 0 var(--edge)' }}>
+        className={cx('card !bg-s2 !backdrop-blur-none relative w-full sm:rounded-xl rounded-b-none sm:rounded-b-xl max-h-[92dvh] flex flex-col animate-sheet', wide ? 'sm:max-w-2xl' : 'sm:max-w-md')}>
         <div className="flex items-center justify-between px-5 h-14 border-b border-hair shrink-0">
           <h2 id={titleId} className="text-[16px] font-semibold" style={{ letterSpacing: '-0.2px' }}>{title}</h2>
           <button className="btn-icon -mr-2" onClick={onClose} aria-label="Tutup"><X size={18} /></button>
@@ -76,7 +75,7 @@ export function Field({ label, error, hint, children }: { label: string; error?:
 
 export function Segmented<T extends string>({ value, onChange, options, className }: { value: T; onChange: (v: T) => void; options: { value: T; label: string }[]; className?: string }) {
   return (
-    <div role="tablist" className={cx('flex gap-1 p-1 rounded-full bg-canvas border border-hair w-full sm:w-auto', className)}>
+    <div role="tablist" className={cx('flex gap-1 p-1 rounded-full border border-hair w-full sm:w-auto', className)} style={{ background: 'var(--input-bg)', boxShadow: 'var(--input-shadow)' }}>
       {options.map((o) => (
         <button key={o.value} role="tab" aria-selected={value === o.value} className={cx('tab flex-1 sm:flex-none', value === o.value && 'shadow-none')} onClick={() => onChange(o.value)} type="button">{o.label}</button>
       ))}
@@ -97,11 +96,11 @@ export function MoneyInput({ value, onChange, currency, autoFocus, id }: { value
   )
 }
 
-export function Progress({ percent, level }: { percent: number; level?: 0 | 1 | 2 | 3 }) {
-  const color = level === 3 || level === 2 ? 'bg-expense' : level === 1 ? 'bg-warn' : level === 0 ? 'bg-income' : 'bg-primary'
+export function Progress({ percent, level, height = 8 }: { percent: number; level?: 0 | 1 | 2 | 3; height?: number }) {
+  const fill = level === 3 || level === 2 ? 'linear-gradient(90deg,#ff7a86,#e63950)' : level === 1 ? 'linear-gradient(90deg,#fbbf24,#f59e0b)' : level === 0 ? 'linear-gradient(90deg,#34d399,#14b8a6)' : 'linear-gradient(90deg,#a78bfa,#7c5cff)'
   return (
-    <div className="h-2 rounded-full bg-s3 overflow-hidden" role="progressbar" aria-valuenow={Math.round(percent)} aria-valuemin={0} aria-valuemax={100}>
-      <div className={cx('h-full rounded-full transition-[width] duration-500', color)} style={{ width: `${Math.min(100, Math.max(0, percent))}%` }} />
+    <div className="rounded-full overflow-hidden" style={{ height, background: 'var(--track)', boxShadow: 'inset 0 1px 2px rgb(0 0 0 / 0.3)' }} role="progressbar" aria-valuenow={Math.round(percent)} aria-valuemin={0} aria-valuemax={100}>
+      <div className="h-full rounded-full transition-[width] duration-700" style={{ width: `${Math.min(100, Math.max(0, percent))}%`, background: fill, boxShadow: 'inset 0 1px 0 rgb(255 255 255 / 0.5)' }} />
     </div>
   )
 }
@@ -109,7 +108,7 @@ export function Progress({ percent, level }: { percent: number; level?: 0 | 1 | 
 export function EmptyState({ icon, title, text, action }: { icon: ReactNode; title: string; text: string; action?: ReactNode }) {
   return (
     <div className="flex flex-col items-center text-center py-14 px-6">
-      <div className="w-11 h-11 rounded-lg bg-s2 border border-hair flex items-center justify-center text-ink-subtle mb-4">{icon}</div>
+      <div className="w-12 h-12 rounded-xl card flex items-center justify-center text-primary mb-4">{icon}</div>
       <h3 className="text-[15px] font-medium">{title}</h3>
       <p className="text-ink-subtle mt-1 max-w-sm">{text}</p>
       {action && <div className="mt-5">{action}</div>}

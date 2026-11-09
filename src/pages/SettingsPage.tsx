@@ -60,6 +60,7 @@ export default function SettingsPage() {
       </Section>
 
       <Section icon={<Sun size={16} />} title="Tampilan dan keuangan">
+        <Row title="Nama panggilan" hint="Dipakai pada sapaan di Dashboard dan inisial profil."><input className="input w-48" value={settings.userName ?? ''} maxLength={24} placeholder="Misal: Bagas" onChange={(e) => updateSettings({ userName: e.target.value })} aria-label="Nama panggilan" /></Row>
         <Row title="Tema"><Segmented value={settings.theme} onChange={(v) => updateSettings({ theme: v })} options={[{ value: 'dark', label: 'Gelap' }, { value: 'light', label: 'Terang' }]} /></Row>
         <Row title="Awal bulan keuangan" hint="Misal gajian tanggal 25: periode berjalan dari tanggal 25 sampai 24 bulan berikutnya.">
           <select className="input w-44" value={settings.monthStartDay} onChange={(e) => updateSettings({ monthStartDay: Number(e.target.value) })} aria-label="Awal bulan keuangan">{Array.from({ length: 28 }, (_, i) => <option key={i + 1} value={i + 1}>Tanggal {i + 1}</option>)}</select>

@@ -76,6 +76,7 @@ export interface Settings {
   lockUntil: number
   autoLockMinutes: number
   theme: 'dark' | 'light'
+  userName?: string
   monthStartDay: number
   blockNegative: boolean
   hideBalance: boolean
