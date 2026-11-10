@@ -1,15 +1,14 @@
 import { useEffect, useState, type ReactNode } from 'react'
 import { useApp } from '../store/AppStore'
 import { PinPad } from './PinPad'
+import Logo from './Logo'
 import { hashPin, verifyPin } from '../lib/crypto'
 
 function Frame({ children }: { children: ReactNode }) {
   return (
     <div className="min-h-dvh flex items-center justify-center px-6 py-10 pt-safe pb-safe">
       <div className="w-full max-w-sm flex flex-col items-center">
-        <div className="w-11 h-11 rounded-lg bg-primary flex items-center justify-center mb-8" aria-hidden>
-          <svg viewBox="0 0 64 64" width="26" height="26"><path d="M20 44V20h20a7 7 0 0 1 0 14H28" fill="none" stroke="#fff" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" /></svg>
-        </div>
+        <div className="flex flex-col items-center gap-2 mb-8"><Logo size={56} /><span className="text-[20px] font-semibold" style={{ letterSpacing: '-0.4px' }}>duitku</span></div>
         {children}
       </div>
     </div>

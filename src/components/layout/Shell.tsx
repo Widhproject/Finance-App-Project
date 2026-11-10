@@ -128,7 +128,7 @@ export default function Shell({ children }: { children: ReactNode }) {
       <div className="min-h-dvh lg:flex">
         {/* Desktop sidebar */}
         <aside className="hidden lg:flex flex-col w-[248px] shrink-0 h-dvh sticky top-0 border-r border-hair/70 px-4 py-5" style={{ background: 'rgb(var(--canvas) / 0.55)', backdropFilter: 'blur(18px)' }}>
-          <div className="flex flex-col items-start gap-2 px-2 mb-7"><Logo size={44} /><span className="text-[22px] font-semibold" style={{ letterSpacing: '-0.5px' }}>Finance</span></div>
+          <div className="flex flex-col items-start gap-2 px-2 mb-7"><Logo size={44} /><span className="text-[22px] font-semibold" style={{ letterSpacing: '-0.5px' }}>duitku</span></div>
           <nav className="flex flex-col gap-1" aria-label="Menu utama">
             {MAIN.map((n) => <NavLink key={n.to} to={n.to} end={n.end} className={linkCls}><n.icon size={17} />{n.label}</NavLink>)}
           </nav>
@@ -151,7 +151,7 @@ export default function Shell({ children }: { children: ReactNode }) {
         <div className="flex-1 min-w-0 flex flex-col">
           <header className="sticky top-0 z-30 border-b border-hair/60 pt-safe" style={{ background: 'rgb(var(--canvas) / 0.65)', backdropFilter: 'blur(18px)' }}>
             <div className="h-16 px-4 lg:px-8 max-w-[1320px] mx-auto flex items-center justify-between gap-3">
-              <div className="lg:hidden flex items-center gap-2"><Logo size={30} /><span className="font-semibold text-[16px]">Finance</span></div>
+              <div className="lg:hidden flex items-center gap-2"><Logo size={30} /><span className="font-semibold text-[16px]">duitku</span></div>
               <form className="hidden lg:flex flex-1 max-w-xl relative" role="search" onSubmit={(e) => { e.preventDefault(); nav(`/transaksi${q.trim() ? `?q=${encodeURIComponent(q.trim())}` : ''}`); searchRef.current?.blur() }}>
                 <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-ink-faint" />
                 <input ref={searchRef} className="input !h-11 !rounded-full pl-10 pr-14" placeholder="Cari transaksi, kategori…" value={q} onChange={(e) => setQ(e.target.value)} aria-label="Cari transaksi" />

@@ -1,4 +1,4 @@
-# Personal Finance Manager
+# duitku (Personal Finance Manager)
 
 Aplikasi pencatat keuangan pribadi, local-first. React + TypeScript + Vite + Tailwind, Recharts, Lucide, IndexedDB, Tesseract.js.
 Desain mengikuti `linear.app/DESIGN.md` (token warna, tipografi, radius, spasi, komponen).
